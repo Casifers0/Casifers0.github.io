@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Casifer.s</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060508;--ink:#f1eff4;--dim:#8d8a97;--v:#8a5bff;--c:#3fe0ff;--line:#221f2b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+:root:not([data-theme="light"]){--bg:#060508}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#060508}}
+:root[data-theme="dark"]{--bg:#060508}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box;margin:0}
+body{height:100%;background:var(--bg);color:var(--ink);font-family:Barlow,system-ui,sans-serif;line-height:1.55;overflow:hidden}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--c);outline-offset:3px}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9;opacity:.14;mix-blend-mode:screen;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.glow{position:fixed;inset:0;background:radial-gradient(60% 50% at 78% 30%,rgba(138,91,255,.28),transparent 70%),radial-gradient(40% 40% at 90% 90%,rgba(63,224,255,.09),transparent 70%)}
+.app{position:relative;height:100%;display:grid;grid-template-columns:15rem minmax(0,1fr)}
+nav{padding:2rem 1.6rem;border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;background:rgba(6,5,8,.6);position:relative;z-index:2}
+nav .me{font-family:Anton,sans-serif;font-size:1.4rem;letter-spacing:.04em;line-height:1.1}
+nav .me small{display:block;font-family:Barlow,sans-serif;font-size:.85rem;color:var(--dim);letter-spacing:0;margin-top:.3rem}
+.menu{display:grid;gap:.15rem}
+.menu button{text-align:left;padding:.55rem 0;font-family:Anton,sans-serif;font-size:1.7rem;letter-spacing:.03em;color:var(--dim);position:relative;padding-left:0;transition:padding .15s,color .15s}
+.menu button[aria-selected="true"]{color:var(--ink);padding-left:1.4rem}
+.menu button[aria-selected="true"]::before{content:"";position:absolute;left:0;top:50%;width:.9rem;height:.9rem;margin-top:-.45rem;background:var(--v);clip-path:polygon(0 0,100% 50%,0 100%)}
+.hint{font-size:.8rem;color:var(--dim)}
+.stage{position:relative;overflow-y:auto;padding:3rem 3.2rem 4rem}
+.screen{display:none;max-width:60rem;min-height:100%}
+.screen.on{display:block;animation:in .35s ease-out}
+@keyframes in{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+h2{font-family:Anton,sans-serif;font-weight:400;font-size:clamp(2.6rem,7vw,5rem);line-height:1;letter-spacing:.01em;margin-bottom:1rem}
+.lead{color:var(--dim);max-width:46ch;margin-bottom:2rem;font-size:1.05rem}
+/* start */
+.start{display:flex;flex-direction:column;justify-content:center;min-height:calc(100vh - 7rem)}
+.big{font-family:Anton,sans-serif;font-weight:400;font-size:clamp(4.4rem,17vw,12.5rem);line-height:.86;letter-spacing:.01em;text-shadow:-.035em 0 0 rgba(63,224,255,.75),.035em 0 0 rgba(138,91,255,.85)}
+.role{margin-top:1.6rem;font-size:1.25rem;max-width:30ch}
+.role span{color:var(--dim)}
+.go{margin-top:2rem;display:inline-flex;align-self:flex-start;background:var(--ink);color:#000;padding:.8rem 1.6rem;font-family:Anton,sans-serif;font-size:1.2rem;letter-spacing:.05em;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))}
+.go:hover{background:var(--c)}
+/* skills */
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2.4rem}
+.grp{font-family:Anton,sans-serif;font-size:1.3rem;margin-bottom:.8rem}
+.sk{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.55rem 0;border-bottom:1px solid var(--line)}
+.pips{display:flex;gap:4px}
+.pips i{width:14px;height:8px;background:#1b1824;transform:skewX(-20deg)}
+.pips i.f{background:var(--v)}
+/* missions */
+.m{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.4rem 1.4rem;padding:1.4rem 0;border-top:1px solid var(--line)}
+.m:last-child{border-bottom:1px solid var(--line)}
+.m h3{font-family:Anton,sans-serif;font-weight:400;font-size:1.9rem;letter-spacing:.02em}
+.m p{grid-column:1;color:var(--dim);max-width:56ch}
+.m .st{grid-row:1;grid-column:2;align-self:center;font-size:.85rem;border:1px solid var(--v);color:#cdbcff;padding:.1rem .7rem}
+.m .tech{grid-column:1;color:var(--c);font-size:.92rem}
+/* edits */
+.tlw{overflow-x:auto}
+.tline{min-width:600px;border:1px solid var(--line);padding:1rem;background:rgba(255,255,255,.02)}
+.ln{position:relative;height:2.6rem;background:#0d0b12;margin-bottom:.5rem}
+.cl{position:absolute;top:3px;bottom:3px;padding:.3rem .7rem;font-size:.85rem;white-space:nowrap;overflow:hidden;background:#241c3c;border-left:3px solid var(--v)}
+.cl.w{background:#2a2830;border-color:var(--ink)}
+.cl.k{background:#10303a;border-color:var(--c)}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.2rem}
+.chips span{border:1px solid var(--line);padding:.2rem .8rem}
+/* contact */
+.ct a{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.2rem 0;border-top:1px solid var(--line);text-decoration:none;font-family:Anton,sans-serif;font-size:1.9rem;letter-spacing:.02em}
+.ct a:last-child{border-bottom:1px solid var(--line)}
+.ct a span{font-family:Barlow,sans-serif;font-size:1.05rem;color:var(--dim);align-self:center}
+.ct a:hover{color:var(--c)}
+
+.xp{margin-top:1rem;font-family:Barlow,sans-serif;font-size:.8rem;letter-spacing:0;color:var(--dim)}
+.xp span{color:var(--ink);font-weight:600}
+.xp i{display:block;height:8px;background:#1b1824;margin:.3rem 0;transform:skewX(-20deg)}
+.xp b{display:block;height:100%;width:81%;background:linear-gradient(90deg,var(--v),var(--c))}
+.ach{display:flex;flex-wrap:wrap;gap:.5rem}
+.ach span{border:1px solid var(--v);padding:.2rem .8rem;color:#cdbcff;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
+.ctl{margin-top:1rem;color:var(--dim);font-size:.9rem;animation:bl 1.2s steps(2) infinite}
+@keyframes bl{50%{opacity:.25}}
+body{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28'><g stroke='%233fe0ff' stroke-width='1.6' fill='none'><circle cx='14' cy='14' r='6'/><path d='M14 1v7M14 20v7M1 14h7M20 14h7'/></g></svg>") 14 14,crosshair}
+a,button{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28'><g stroke='%238a5bff' stroke-width='2' fill='none'><circle cx='14' cy='14' r='8'/><path d='M14 1v7M14 20v7M1 14h7M20 14h7'/></g></svg>") 14 14,pointer}
+@media(max-width:820px){
+ body{overflow:auto}.app{display:block;height:auto;min-height:100%}
+ nav{position:sticky;top:0;flex-direction:row;padding:.6rem 1rem;border-right:0;border-bottom:1px solid var(--line);background:rgba(6,5,8,.92);overflow-x:auto;padding-top:calc(.6rem + env(safe-area-inset-top,0px))}
+ nav .me,.hint{display:none}.menu{display:flex;gap:1rem}.menu button{font-size:1.2rem;white-space:nowrap;padding:.3rem 0!important}.menu button[aria-selected="true"]::before{display:none}
+ .stage{padding:2rem 1.2rem 4rem;overflow:visible}.start{min-height:75vh}.two,.art{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){.screen.on,.ctl{animation:none}}
+</style>
+</head>
+<body>
+<div class="glow" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="app">
+<nav aria-label="Sections">
+  <div class="me">CASIFER.S<small>Abdallah Mohamed</small><div class="xp"><span>LVL 18</span><i><b></b></i><em>2,430 / 3,000 XP</em></div></div>
+  <div class="menu" role="tablist">
+    <button role="tab" data-s="start" aria-selected="true">Start</button>
+    <button role="tab" data-s="skills" aria-selected="false">Skills</button>
+    <button role="tab" data-s="missions" aria-selected="false">Missions</button>
+    <button role="tab" data-s="edits" aria-selected="false">Edits</button>
+    <button role="tab" data-s="contact" aria-selected="false">Contact</button>
+  </div>
+  <div class="hint">Controls: ↑ ↓ move, click to select</div>
+</nav>
+<main class="stage" id="stage">
+
+<section class="screen on" id="start"><div class="start">
+  <div class="big" aria-label="Casifer.s">CASIFER<br>.S</div>
+  <p class="role">Junior full stack developer<br><span>and junior video editor</span></p>
+  <button class="go" data-s="missions">Press start</button>
+  <p class="ctl">Player 1 ready. Pick a mission to begin.</p>
+</div></section>
+
+<section class="screen" id="skills">
+  <h2>Skills</h2>
+  <p class="lead">Learning fast on both sides of the screen: the code and the cut.</p>
+  <div class="two">
+    <div><div class="grp">Code</div>
+      <div class="sk">HTML and CSS<span class="pips" data-n="4"></span></div>
+      <div class="sk">JavaScript<span class="pips" data-n="3"></span></div>
+      <div class="sk">Node and Express<span class="pips" data-n="3"></span></div>
+      <div class="sk">SQL<span class="pips" data-n="2"></span></div></div>
+    <div><div class="grp">Edit</div>
+      <div class="sk">CapCut<span class="pips" data-n="4"></span></div>
+      <div class="sk">Premiere Pro<span class="pips" data-n="3"></span></div>
+      <div class="sk">After Effects<span class="pips" data-n="2"></span></div>
+      <div class="sk">Color and sound<span class="pips" data-n="3"></span></div></div>
+  </div>
+  <div class="grp" style="margin-top:2.2rem">Achievements</div>
+  <div class="ach"><span>First deploy</span><span>First montage exported</span><span>Bug slayer</span><span>Clutch edit</span></div>
+</section>
+
+<section class="screen" id="missions">
+  <h2>Missions</h2>
+  <p class="lead">Quests I took on while learning the full stack.</p>
+  <div class="m"><h3>Loot Locker</h3><span class="st">In progress, +300 XP</span><p>Inventory tracker for game collections with rarity tags, search and accounts.</p><div class="tech">React, Node, Express, SQLite</div></div>
+  <div class="m"><h3>QuestBoard</h3><span class="st">Cleared, +200 XP</span><p>A study planner that turns homework into quests with XP and streaks.</p><div class="tech">JavaScript, Express, MongoDB</div></div>
+  <div class="m"><h3>ClipCue</h3><span class="st">Prototype, +150 XP</span><p>Mark beats on a track in the browser and export cut points for your editor.</p><div class="tech">JavaScript, Web Audio, Canvas</div></div>
+</section>
+
+<section class="screen" id="edits">
+  <h2>Edits</h2>
+  <p class="lead">Gameplay montages, short reels and motion titles, cut to the beat.</p>
+  <div class="tlw"><div class="tline" role="img" aria-label="Sample edit timeline">
+    <div class="ln"><div class="cl k" style="left:6%;width:20%">Title in</div><div class="cl k" style="left:54%;width:26%">Glitch hit</div></div>
+    <div class="ln"><div class="cl w" style="left:0;width:32%">Gameplay A</div><div class="cl w" style="left:33%;width:22%">Gameplay B</div><div class="cl w" style="left:56%;width:44%">Clutch, slow-mo</div></div>
+    <div class="ln"><div class="cl" style="left:0;width:100%">Track, cut on the drops</div></div>
+  </div></div>
+  <div class="chips"><span>Premiere Pro</span><span>After Effects</span><span>CapCut</span></div>
+</section>
+
+<section class="screen" id="contact">
+  <h2>Contact</h2>
+  <p class="lead">Need a site or an edit? Message me.</p>
+  <div class="ct">
+    <a href="mailto:kingediting122@gmail.com">Email <span>kingediting122@gmail.com</span></a>
+    <a href="https://github.com/Casifers0" target="_blank" rel="noopener">GitHub <span>Casifers0</span></a>
+    <a href="https://t.me/Casifers" target="_blank" rel="noopener">Telegram <span>Casifers</span></a>
+    <a href="#contact">Discord <span>casi.s</span></a>
+  </div>
+</section>
+</main>
+</div>
+<script>
+(function(){
+var ids=['start','skills','missions','edits','contact'],tabs=[].slice.call(document.querySelectorAll('.menu button'));
+function show(id){ids.forEach(function(i){document.getElementById(i).classList.toggle('on',i===id)});tabs.forEach(function(t){t.setAttribute('aria-selected',t.dataset.s===id)});document.getElementById('stage').scrollTop=0;window.scrollTo(0,0)}
+document.querySelectorAll('[data-s]').forEach(function(b){b.addEventListener('click',function(){show(b.dataset.s)})});
+document.addEventListener('keydown',function(e){if(e.key!=='ArrowDown'&&e.key!=='ArrowUp')return;var cur=ids.findIndex(function(i){return document.getElementById(i).classList.contains('on')});var n=Math.max(0,Math.min(ids.length-1,cur+(e.key==='ArrowDown'?1:-1)));if(n!==cur){e.preventDefault();show(ids[n])}});
+document.querySelectorAll('.pips').forEach(function(p){var n=+p.dataset.n;for(var i=0;i<5;i++){var s=document.createElement('i');if(i<n)s.className='f';p.appendChild(s)}});
+})();
+</script>
+</body>
+</html>
